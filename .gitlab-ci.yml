@@ -1,0 +1,11 @@
+stages:
+  - validate
+
+validate-job:
+  stage: validate
+  image: node:20-alpine
+
+  script:
+    - node --version
+    - npm --version
+    - echo "Pipeline is working"
