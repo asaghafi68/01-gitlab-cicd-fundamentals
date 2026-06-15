@@ -29,7 +29,7 @@ build-job:
 
 docker-build-job:
   stage: docker-build
-  image: docker:24
+  image: docker:20.10.24
 
   script:
     - docker version
