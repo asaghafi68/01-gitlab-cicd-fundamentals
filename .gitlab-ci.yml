@@ -29,6 +29,9 @@ docker-build-job:
   stage: docker-build
   image: docker:24
 
+  variables:
+    DOCKER_API_VERSION: "1.44"
+
   script:
     - docker version
     - docker build -t node-time-app:ci ./app
