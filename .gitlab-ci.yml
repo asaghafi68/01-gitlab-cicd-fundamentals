@@ -2,11 +2,11 @@ stages:
   - validate
   - test
   - build
+  - docker-build
 
 validate-job:
   stage: validate
   image: node:20-alpine
-
   script:
     - node --version
     - npm --version
@@ -14,7 +14,6 @@ validate-job:
 test-job:
   stage: test
   image: node:20-alpine
-
   script:
     - cd app
     - npm ci
@@ -23,8 +22,16 @@ test-job:
 build-job:
   stage: build
   image: node:20-alpine
-
   script:
     - cd app
     - npm ci
-    - echo "Application build completed"
+    - echo "Build completed"
+
+docker-build-job:
+  stage: docker-build
+  image: docker:24
+
+  script:
+    - docker version
+    - docker build -t node-time-app:ci ./app
+    - docker images
