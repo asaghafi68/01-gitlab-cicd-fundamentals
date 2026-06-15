@@ -3,6 +3,7 @@ stages:
   - test
   - build
   - docker-build
+  - docker-push
 
 validate-job:
   stage: validate
@@ -23,16 +24,29 @@ build-job:
   stage: build
   image: node:20-alpine
   script:
-    - echo "Build completed"
+    - echo "Build completed (no compile step for this Node app)"
 
 docker-build-job:
   stage: docker-build
   image: docker:24
-
   variables:
     DOCKER_API_VERSION: "1.44"
-
   script:
     - docker version
     - docker build -t node-time-app:ci ./app
     - docker images
+
+docker-push-job:
+  stage: docker-push
+  image: docker:24
+  variables:
+    DOCKER_API_VERSION: "1.44"
+  script:
+    - echo "Logging into GitLab Registry..."
+    - docker login -u "$CI_REGISTRY_USER" -p "$CI_REGISTRY_PASSWORD" "$CI_REGISTRY"
+
+    - echo "Tagging image..."
+    - docker tag node-time-app:ci "$CI_REGISTRY_IMAGE:latest"
+
+    - echo "Pushing image..."
+    - docker push "$CI_REGISTRY_IMAGE:latest"
