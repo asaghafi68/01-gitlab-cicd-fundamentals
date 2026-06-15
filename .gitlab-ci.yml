@@ -1,5 +1,6 @@
 stages:
   - validate
+  - test
   - build
 
 validate-job:
@@ -9,7 +10,15 @@ validate-job:
   script:
     - node --version
     - npm --version
-    - echo "Validation passed"
+
+test-job:
+  stage: test
+  image: node:20-alpine
+
+  script:
+    - cd app
+    - npm ci
+    - npm test
 
 build-job:
   stage: build
